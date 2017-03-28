@@ -1,3 +1,4 @@
+#v0.9
 call plug#begin('~/.vim/plugged')
 
 Plug 'vim-scripts/a.vim'
