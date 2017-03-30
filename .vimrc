@@ -13,7 +13,6 @@ Plug 'nsf/gocode', { 'rtp': 'vim' }
 
 Plug 'https://github.com/luofei614/vim-plug', { 'dir':'~/.vim/my'}
 
-Plug 'AutoComplPop'
 
 Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 " king add
@@ -58,7 +57,19 @@ Plug 'aceofall/gtags.vim'
 Plug 'tranngocthachs/gtags-cscope-vim-plugin'
 
 " Code Sreach 
+
 Plug 'rking/ag.vim'
+" unit系列
+Plug 'Shougo/unite.vim'
+Plug 'tsukkee/unite-tag'
+Plug 'Shougo/neoinclude.vim'
+Plug 'Shougo/neomru.vim'  
+Plug 'hewes/unite-gtags'  
+Plug 'Shougo/vimproc.vim', {'do' : 'make'}
+Plug 'Shougo/unite-outline'
+Plug 'osyo-manga/unite-filetype'
+" autotag
+Plug 'craigemery/vim-autotag'
 call plug#end()
 
 " 基本设置
@@ -72,10 +83,6 @@ colorscheme gruvbox
 set background=dark
 
 
-"autocomplpop 设置
-let g:AutoComplPop_IgnoreCaseOption=1
-set ignorecase
-let g:acp_behaviorKeywordCommand="\<C-n>"
 
 "搜索高亮
 set hlsearch
@@ -289,3 +296,95 @@ map <Leader><Leader>k <Plug>(easymotion-k)
 map <Leader><leader>l <Plug>(easymotion-lineforward)
 " 重复上一次操作, 类似repeat插件, 很强大
 map <Leader><leader>. <Plug>(easymotion-repeat)
+
+
+" unite
+scriptencoding utf-8
+call unite#custom#source('codesearch', 'max_candidates', 30)
+call unite#filters#matcher_default#use(['matcher_fuzzy'])
+call unite#filters#sorter_default#use(['sorter_rank'])
+call unite#custom#profile('default', 'context', {
+      \   'safe': 0,
+      \   'start_insert': 1,
+      \   'ignorecase' : 1,
+      \   'short_source_names': 1,
+      \   'update_time': 200,
+      \   'direction': 'rightbelow',
+      \   'winwidth': 40,
+      \   'winheight': 15,
+      \   'max_candidates': 100,
+      \   'no_auto_resize': 1,
+      \   'vertical_preview': 1,
+      \   'cursor_line_time': '0.10',
+      \   'hide_icon': 0,
+      \   'candidate-icon': ' ',
+      \   'marked_icon': '✓',
+      \   'prompt' : '➭ '
+      \ })
+call unite#custom#profile('source/neobundle/update', 'context', {
+      \   'start_insert' : 0,
+      \ })
+let g:unite_source_codesearch_ignore_case = 1
+let g:unite_source_buffer_time_format = '(%m-%d-%Y %H:%M:%S) '
+let g:unite_source_file_mru_time_format = '(%m-%d-%Y %H:%M:%S) '
+let g:unite_source_directory_mru_time_format = '(%m-%d-%Y %H:%M:%S) '
+let g:unite_source_directory_mru_limit = 80
+let g:unite_source_file_rec_max_depth = 6
+let g:unite_enable_ignore_case = 1
+let g:unite_enable_smart_case = 1
+let g:unite_data_directory='~/.cache/unite'
+let g:unite_enable_start_insert=1
+let g:unite_source_history_yank_enable=1
+let g:unite_split_rule = 'botright'
+let g:unite_winheight=25
+let g:unite_source_grep_default_opts = '-iRHn'
+      \ . " --exclude='tags'"
+      \ . " --exclude='cscope*'"
+      \ . " --exclude='*.svn*'"
+      \ . " --exclude='*.log*'"
+      \ . " --exclude='*tmp*'"
+      \ . " --exclude-dir='**/tmp'"
+      \ . " --exclude-dir='CVS'"
+      \ . " --exclude-dir='.svn'"
+      \ . " --exclude-dir='.git'"
+      \ . " --exclude-dir='node_modules'"
+
+
+
+let g:unite_source_grep_max_candidates = 200
+let g:unite_source_grep_command = 'ag'
+let g:unite_source_grep_default_opts =
+    \ '-i --line-numbers --nocolor --nogroup --hidden --ignore ' .
+    \  '''.hg'' --ignore ''.svn'' --ignore ''.git'' --ignore ''.bzr'''
+let g:unite_source_grep_recursive_opt = ''
+let g:unite_source_rec_async_command =
+      \ ['ag', '--follow', '--nocolor', '--nogroup',
+      \  '--hidden', '-g', '']
+
+
+nnoremap <silent><leader>u :<C-u>Unite -buffer-name=Mixed -start-insert file file_mru file_rec buffer<cr>
+nnoremap <silent><leader>ur :<C-u>Unite -buffer-name=files file_rec/async:!<cr>
+
+call unite#custom#source('file_rec/async', 'ignore_globs',['*.png','.git/','*.ttf'])
+
+nnoremap <silent><leader>um  :<C-u>Unite -start-insert mapping<CR>
+
+nnoremap <silent><leader>uo  :<C-u>Unite -start-insert outline<CR>
+"" Tag search
+""" For searching the word in the cursor in tag file
+nnoremap <silent><leader>ut :<c-u>Unite tag/include -start-insert<CR>
+
+"" grep dictionay
+""" For searching the word in the cursor in the current directory
+nnoremap <silent><leader>uf :Unite -auto-preview -no-split grep:.::<C-R><C-w><CR>
+
+"nnoremap <leader>ugd :execute 'Unite  -auto-preview -start-insert -no-split gtags/def:'.expand('<cword>')<CR>
+"nnoremap <leader>ugc :execute 'Unite  -auto-preview -start-insert -no-split gtags/context'<CR>
+nnoremap <leader>ugr :execute 'Unite  -auto-preview -start-insert -no-split gtags/ref'<CR>
+nnoremap <leader>ug :execute 'Unite  -auto-preview -start-insert -no-split gtags/grep'<CR>
+"nnoremap <leader>ugp :execute 'Unite  -auto-preview -start-insert -no-split gtags/completion'<CR>
+vnoremap <leader>ugd <ESC>:execute 'Unite -auto-preview -start-insert -no-split gtags/def:'.GetVisualSelection()<CR>
+let g:unite_source_gtags_project_config = get(g:, 'unite_source_gtags_project_config', {
+      \ '_':                   { 'treelize': 0 }
+      \ })
+
