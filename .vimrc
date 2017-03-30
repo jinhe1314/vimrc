@@ -8,11 +8,6 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'edkolev/tmuxline.vim'
 
 Plug 'junegunn/vim-easy-align'
-" Plugin options
-Plug 'nsf/gocode', { 'rtp': 'vim' }
-
-Plug 'https://github.com/luofei614/vim-plug', { 'dir':'~/.vim/my'}
-
 
 Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 " king add
