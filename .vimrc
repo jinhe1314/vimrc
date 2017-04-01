@@ -84,6 +84,12 @@ set background=dark
 "搜索高亮
 set hlsearch
 
+" 设置默认进行大小写不敏感查找
+set ignorecase
+" 如果有一个大写字母，则切换到大小写敏感查找
+set smartcase 
+
+
 "设置NERDTreetagbar的宽度
 let g:NERDTreeWinSize = 30
 let g:NERDTreeShowBookmarks=1
@@ -384,11 +390,12 @@ nnoremap <silent><leader>ut :<c-u>Unite tag/include -start-insert<CR>
 "" grep dictionay
 """ For searching the word in the cursor in the current directory
 nnoremap <silent><leader>uf :Unite -auto-preview  grep:.::<C-R><C-w><CR>
-
+nnoremap <silent><leader>uff :Unite -auto-preview  grep:.:<CR>
 " nnoremap <leader>ugd :execute 'Unite  -auto-preview -start-insert -no-split gtags/def:'.expand('<cword>')<CR>
 " nnoremap <leader>ugc :execute 'Unite  -auto-preview -start-insert -no-split gtags/context'<CR>
-nnoremap <leader>ugr :execute 'Unite  -auto-preview -start-insert -no-split gtags/ref'<CR>
-nnoremap <leader>ug :execute 'Unite  -auto-preview -start-insert -no-split gtags/grep'<CR>
+nnoremap <leader>ugr :execute 'Unite  -auto-preview -start-insert  gtags/ref'<CR>
+nnoremap <leader>ug :execute 'Unite  -auto-preview -start-insert  gtags/grep:'.expand('<cword>')<CR>
+nnoremap <leader>ugg :execute 'Unite  -auto-preview -start-insert  gtags/grep'<CR>
 "nnoremap <leader>ugp :execute 'Unite  -auto-preview -start-insert -no-split gtags/completion'<CR>
 vnoremap <leader>ugd <ESC>:execute 'Unite -auto-preview -start-insert -no-split gtags/def:'.GetVisualSelection()<CR>
 let g:unite_source_gtags_project_config = get(g:, 'unite_source_gtags_project_config', {
