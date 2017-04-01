@@ -65,6 +65,8 @@ Plug 'Shougo/unite-outline'
 Plug 'osyo-manga/unite-filetype'
 " autotag
 Plug 'craigemery/vim-autotag'
+" start screen
+Plug 'mhinz/vim-startify'
 call plug#end()
 
 " 基本设置
@@ -122,6 +124,9 @@ nnoremap <leader>o <C-t>
 
 "快速关闭
 nnoremap <leader>q :qa<CR>
+
+" 进入当前文件目录
+nnoremap <leader>cd :cd %:p:h<CR>
 
 "删除不剪切, rd
 nnoremap r "_d
@@ -347,7 +352,7 @@ let g:unite_source_grep_default_opts = '-iRHn'
 
 
 let g:unite_source_grep_max_candidates = 200
-if executable('hw')
+if executable('hwaaa')
     let g:unite_source_grep_command = get(g:, 'unite_source_grep_command', 'hw')
     let g:unite_source_grep_default_opts = get(g:, 'unite_source_grep_default_opts', '--no-group --no-color')
     let g:unite_source_grep_recursive_opt = get(g:, 'unite_source_grep_recursive_opt', '')
@@ -380,8 +385,8 @@ nnoremap <silent><leader>ut :<c-u>Unite tag/include -start-insert<CR>
 """ For searching the word in the cursor in the current directory
 nnoremap <silent><leader>uf :Unite -auto-preview  grep:.::<C-R><C-w><CR>
 
-"nnoremap <leader>ugd :execute 'Unite  -auto-preview -start-insert -no-split gtags/def:'.expand('<cword>')<CR>
-"nnoremap <leader>ugc :execute 'Unite  -auto-preview -start-insert -no-split gtags/context'<CR>
+" nnoremap <leader>ugd :execute 'Unite  -auto-preview -start-insert -no-split gtags/def:'.expand('<cword>')<CR>
+" nnoremap <leader>ugc :execute 'Unite  -auto-preview -start-insert -no-split gtags/context'<CR>
 nnoremap <leader>ugr :execute 'Unite  -auto-preview -start-insert -no-split gtags/ref'<CR>
 nnoremap <leader>ug :execute 'Unite  -auto-preview -start-insert -no-split gtags/grep'<CR>
 "nnoremap <leader>ugp :execute 'Unite  -auto-preview -start-insert -no-split gtags/completion'<CR>
