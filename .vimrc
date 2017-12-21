@@ -67,6 +67,15 @@ Plug 'osyo-manga/unite-filetype'
 Plug 'craigemery/vim-autotag'
 " start screen
 Plug 'mhinz/vim-startify'
+" 异步执行命令
+Plug 'skywind3000/asyncrun.vim'
+
+" markdown
+Plug 'godlygeek/tabular'
+Plug 'plasticboy/vim-markdown'
+Plug 'hotoo/pangu.vim'
+Plug 'terryma/vim-multiple-cursors'
+Plug 'junegunn/vim-easy-align'
 call plug#end()
 
 " 基本设置
@@ -79,7 +88,9 @@ let g:solarized_termcolors=16
 colorscheme gruvbox
 set background=dark
 
-
+" 行号
+set relativenumber 
+set number      
 
 "搜索高亮
 set hlsearch
@@ -115,7 +126,6 @@ set cscopeprg='gtags-cscope'   " 使用 gtags-cscope 代替 cscope
 let GtagsCscope_Auto_Load = 1
 let CtagsCscope_Auto_Map = 1
 let GtagsCscope_Quiet = 1
-
 
 nnoremap <leader><Right> <C-w>l
 nnoremap <leader><Left> <C-w>h
@@ -161,33 +171,7 @@ map! <C-Z> <C-O>:u<CR>
 map <2-leftmouse> \m
 inoremap <2-leftmouse> <Esc>\m
 
-"ctrl+鼠标左键跳转
 
-"--------------------
-" Function: Open tag under cursor in new tab
-" Source:   http://stackoverflow.com/questions/563616/vimctags-tips-and-tricks
-"--------------------
-map <C-\> :tab split<CR>:exec("tag ".expand("<cword>"))<CR>
-"--------------------
-" Function: Remap keys to make it more similar to firefox tab functionality
-" Purpose:  Because I am familiar with firefox tab functionality
-" 切换tab页 用gt
-"--------------------
-
-
-function! InsertTabWrapper()
-    let col=col('.')-1
-    if !col || getline('.')[col-1] !~ '\k'
-        return "\<TAB>"
-    else
-        return "\<C-x>\<C-o>"
-    endif
-endfunction
-"按tab键，全能提示，
-"注意要用inoremap，不能用map！，如果用map！在命令模式下tab键没有提示功能。
-inoremap <TAB> <C-R>=InsertTabWrapper()<CR>
-"shift+tab 展开代码片段
-imap <S-TAB> <Plug>snipMateNextOrTrigger
 
 "支持鼠标
 set mouse=a
@@ -219,7 +203,6 @@ let g:airline_theme="gruvbox"
 let g:airline_powerline_fonts = 1
 " tmuxline
 let g:airline#extensions#tmuxline#enabled = 0
-
 " 用数字切换buffer页面 使用vim-airline，主要是设置tabline扩展
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#tab_nr_type = 1 " tab number
@@ -229,6 +212,7 @@ let g:airline#extensions#tabline#buffer_nr_show = 0
 let g:airline#extensions#tabline#fnametruncate = 16
 let g:airline#extensions#tabline#fnamecollapse = 2
 let g:airline#extensions#tabline#buffer_idx_mode = 1
+let g:airline_section_error = airline#section#create_right(['%{g:asyncrun_status}'])
 
 " let g:bufferline_show_bufnr = 0
 nmap <leader>1 <Plug>AirlineSelectTab1
@@ -402,3 +386,20 @@ let g:unite_source_gtags_project_config = get(g:, 'unite_source_gtags_project_co
       \ '_':                   { 'treelize': 0 }
       \ })
 
+
+
+" multi_cursor
+" let g:multi_cursor_use_default_mapping=0
+" Default mapping
+" let g:multi_cursor_next_key='<C-m>'
+" let g:multi_cursor_prev_key='<C-p>'
+" let g:multi_cursor_skip_key='<C-x>'
+" let g:multi_cursor_quit_key='<Esc>'
+
+
+vmap <Leader>s <Plug>(EasyAlign)
+nmap <Leader>s <Plug>(EasyAlign)
+if !exists('g:easy_align_delimiters')
+  let g:easy_align_delimiters = {}
+endif
+let g:easy_align_delimiters['#'] = { 'pattern': '#', 'ignore_groups': ['String'] }
